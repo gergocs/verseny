@@ -90,7 +90,7 @@ int main() {
 
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons( PORT );
+    address.sin_port = htons(PORT);
 
     if(bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0){
         perror("bind failed");
@@ -155,7 +155,7 @@ int main() {
                 sqlite3_free(messaggeError);
                 send(new_socket , error.c_str(), error.length(), 0 );
             }else{
-                cout<<"deleted"<<endl;
+                cout<<"deleted "<<str<<endl;
                 send(new_socket , success.c_str(), success.length(), 0 );
             }
 
