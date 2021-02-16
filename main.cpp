@@ -16,6 +16,7 @@
 #define closer "GET /close"
 #define json "GET /json"
 #define inserter "GET /insert/"
+#define deleter "GET /delete/"
 
 using namespace std;
 
@@ -133,6 +134,31 @@ int main() {
             sqlite3_exec(db, query.c_str(), callback, nullptr, nullptr);
             gdata += "\n}\n";
             send(new_socket , gdata.c_str(), gdata.length() , 0 );
+        }
+
+        found = tmp.find(deleter);
+
+        if(found != string::npos){
+            string str;
+
+            size_t found2 = tmp.find("HTTP");
+
+            for(unsigned int i = found+12; i < found2-1; i++){
+                str+=tmp[i];
+            }
+            string sql = "DELETE FROM reports WHERE id = " + str + ";";
+
+            exit = sqlite3_exec(db, sql.c_str(), nullptr, 0, &messaggeError);
+
+            if(exit != SQLITE_OK){
+                cerr << " ERROR DELETE" << endl;
+                sqlite3_free(messaggeError);
+                send(new_socket , error.c_str(), error.length(), 0 );
+            }else{
+                cout<<"deleted"<<endl;
+                send(new_socket , success.c_str(), success.length(), 0 );
+            }
+
         }
 
         found = tmp.find(inserter);
