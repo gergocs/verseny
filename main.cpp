@@ -35,16 +35,21 @@ struct datas{
 
 static int callback(void* data, int argc, char** argv, char** azColName){
 
-    gdata += " \"reports\": [\n \t{\n";
+    gdata += "\n\t\"reports\": [\n \t\t{\n";
 
     for(int i = 0; i < argc; i++){
-        gdata += "\t\t\"";
+        gdata += "\t\t\t\"";
         gdata += azColName[i];
         gdata += "\": \"";
         gdata += argv[i] ? argv[i] : "NULL";
-        gdata += "\",\n";
+        if(i != argc-1){
+            gdata += "\",\n";
+        }else{
+            gdata += "\"\n";
+        }
+
     }
-    gdata += "\t\t}\n \t]\n }";
+    gdata += "\t\t}\n \t]";
     return 0;
 }
 
@@ -70,7 +75,7 @@ int main() {
     size_t found;
 
     const string query = "SELECT * FROM reports";
-    const string last = "SELECT * FROM reports";
+    const string last = "SELECT id FROM reports ORDER BY id DESC LIMIT 1";
 
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0){
         perror("socket failed");
@@ -123,7 +128,7 @@ int main() {
         found = tmp.find(json);
 
         if(found != string::npos){
-            gdata = "{\n";
+            gdata = "{";
 
             sqlite3_exec(db, query.c_str(), callback, nullptr, nullptr);
             gdata += "\n}\n";
@@ -135,9 +140,9 @@ int main() {
         if(found != string::npos){
             size_t found2 = tmp.find("HTTP");
             size_t found3;
+            unsigned int counter = 0;
             datas tmp2;
             string str;
-            unsigned int counter = 0;
             for(unsigned int i = found+12; i < found2-1; i++){
                 if(tmp[i]=='/'){
                     if(counter == 3){
@@ -182,15 +187,18 @@ int main() {
 
             found3 = gdata.find("\"id\": \"");
             str = "";
+
             if(found3 != string::npos){
-                size_t found4 = gdata.find("\",\n\t\t\"name\"");
+                size_t found4 = gdata.find("\"\n");
                 for(unsigned int i = found3+7; i < found4; i++){
                     str += gdata[i];
                 }
+                counter = stoi(str);
+                counter++;
             }
 
             string insert = "INSERT INTO reports VALUES(";
-                    insert += str;
+                    insert += to_string(counter);
                     insert += ",\"";
                     insert += tmp2.name + "\",\"" + tmp2.clas + "\", \"" + tmp2.place + "\", ";
                     insert += to_string(tmp2.type);
