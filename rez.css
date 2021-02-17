@@ -1,0 +1,21 @@
+th{
+    text-align: center;
+}
+
+tr{
+    text-align: center;
+}
+body{
+    background-color: lightblue;
+    text-align: center;
+    text-transform: capitalize;
+}
+#send{
+    text-align: left;
+}
+
+caption{
+    border: 14px;
+    border-color: lightsalmon;
+    background-color: navajowhite;
+}

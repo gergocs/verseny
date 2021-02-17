@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Megoldás</title>
+    <link rel="stylesheet" href="rez.css">
+    <script type="text/javascript" src="rez.js"></script>
+</head>
+<body>
+
+<form action="output.txt"  method="post">
+    <table border="5">
+        <caption title="Áramütés elleni védelem mérési jegyzőkönyv">Áramütés elleni védelem mérési jegyzőkönyv</caption>
+        <tr>
+            <td rowspan="2">#</td>
+            <th title="Sorszám" rowspan="2">Sorszám:</th>
+            <th title="Vizsgálat helye,Berendezés megnevezése" rowspan="2">Vizsgálat helye,Berendezés megnevezése</th>
+            <th title="Helye:" rowspan="2">Helye:</th>
+            <th title="ÉV-osztály" rowspan="2">ÉV-osztály</th>
+            <th title="Biztosító típus" colspan="2">Biztosító</th>
+            <th title="ÁVK" rowspan="2">ÁVK</th>
+            <th title="Vizsgálat eredménye" colspan="2">Vizsgálat eredménye</th>
+            <th title="Minősítés" rowspan="2">Minősítés</th>
+        </tr>
+        <tr>
+            <th title="típus">Típus</th>
+            <th title="Névleges áram">Névleges áram<br></th>
+            <th title="Megtekintés">Megtekintés</th>
+            <th title="Műszeres">Műszeres</th>
+
+        </tr>
+        <tr>
+            <td><button onclick="addRow()">+</button></td>
+            <td><input type="number" autofocus title="Sorszám:" min="1" name="number"></td>
+            <td><input title="Vizsgálat helye,Berendezés megnevezése" type="text" name="text"></td>
+            <td><input type="text" title="Helye:" name="text1">
+            </td>
+
+            <td>
+                <label>
+                    <select name="ev-class">
+
+                        <option  value="nothing"></option>
+                        <option  value="zero">0</option>
+                        <option  value="one">I</option>
+                        <option  value="two">II</option>
+                        <option  value="three">III</option>
+                        <option  value="eph">EPH</option>
+                        <option  value="oneperthree">I/3</option>
+
+                    </select>
+                </label>
+            </td>
+
+            <td>
+                <label>
+                    <select name="biztaram">
+                        <option value="-">-</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="GL">GL</option>
+                        <option value="GG">GG</option>
+                    </select>
+                </label>
+            </td>
+
+            <td>
+                <label>
+                    <select name="bizttipus">
+                        <option value="-">-</option>
+                        <option value="8">8</option>
+                        <option value="10">10</option>
+                        <option value="12">12</option>
+                        <option value="16">16</option>
+                    </select>
+                </label>
+            </td>
+
+            <td>
+                <label>
+                    <select>
+                        <option value="nothing"></option>
+                        <option value="right">MF</option>
+                        <option value="inapt">NF</option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label>
+                    <select name="certification">
+                        <option value="nothing1"></option>
+                        <option  value="nothing">-</option>
+                        <option  value="pe">PE</option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label>
+                    <select name="instrumental">
+                        <option value="-">-</option>
+                        <option value="PE-folyt">PE-folytonos</option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label>
+                    <select name="classification">
+                        <option value="nothing"></option>
+                        <option value="right1">MF</option>
+                        <option value="linapt1">NF</option>
+                    </select>
+                </label>
+            </td>
+        </tr>
+    </table>
+    <input type="button" id="bt" value="Submit Data" onclick="submit()">
+</form>
+
+</body>
+</html>
