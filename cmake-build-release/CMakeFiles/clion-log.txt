@@ -1,0 +1,4 @@
+/snap/clion/139/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - Unix Makefiles" /home/gergocs/CLionProjects/server
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/gergocs/CLionProjects/server/cmake-build-release

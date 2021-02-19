@@ -1,0 +1,4 @@
+/home/gergocs/CLionProjects/server/cmake-build-release/CMakeFiles/rebuild_cache.dir
+/home/gergocs/CLionProjects/server/cmake-build-release/CMakeFiles/edit_cache.dir
+/home/gergocs/CLionProjects/server/cmake-build-release/CMakeFiles/server.dir
+/home/gergocs/CLionProjects/server/cmake-build-release/CMakeFiles/jsoncpp.dir

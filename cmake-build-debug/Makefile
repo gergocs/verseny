@@ -68,10 +68,10 @@ RM = /snap/clion/139/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/gergocs/CLionProjects/untitled
+CMAKE_SOURCE_DIR = /home/gergocs/CLionProjects/server
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/gergocs/CLionProjects/untitled/cmake-build-debug
+CMAKE_BINARY_DIR = /home/gergocs/CLionProjects/server/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -100,9 +100,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/gergocs/CLionProjects/untitled/cmake-build-debug/CMakeFiles /home/gergocs/CLionProjects/untitled/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gergocs/CLionProjects/server/cmake-build-debug/CMakeFiles /home/gergocs/CLionProjects/server/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/gergocs/CLionProjects/untitled/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/gergocs/CLionProjects/server/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -131,17 +131,84 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named untitled
+# Target rules for targets named server
 
 # Build rule for target.
-untitled: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 untitled
-.PHONY : untitled
+server: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 server
+.PHONY : server
 
 # fast build rule for target.
-untitled/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/untitled.dir/build.make CMakeFiles/untitled.dir/build
-.PHONY : untitled/fast
+server/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/build
+.PHONY : server/fast
+
+#=============================================================================
+# Target rules for targets named jsoncpp
+
+# Build rule for target.
+jsoncpp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 jsoncpp
+.PHONY : jsoncpp
+
+# fast build rule for target.
+jsoncpp/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/jsoncpp.dir/build.make CMakeFiles/jsoncpp.dir/build
+.PHONY : jsoncpp/fast
+
+WebsocketServer.o: WebsocketServer.cpp.o
+
+.PHONY : WebsocketServer.o
+
+# target to build an object file
+WebsocketServer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/WebsocketServer.cpp.o
+.PHONY : WebsocketServer.cpp.o
+
+WebsocketServer.i: WebsocketServer.cpp.i
+
+.PHONY : WebsocketServer.i
+
+# target to preprocess a source file
+WebsocketServer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/WebsocketServer.cpp.i
+.PHONY : WebsocketServer.cpp.i
+
+WebsocketServer.s: WebsocketServer.cpp.s
+
+.PHONY : WebsocketServer.s
+
+# target to generate assembly for a file
+WebsocketServer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/WebsocketServer.cpp.s
+.PHONY : WebsocketServer.cpp.s
+
+external/jsoncpp.o: external/jsoncpp.cpp.o
+
+.PHONY : external/jsoncpp.o
+
+# target to build an object file
+external/jsoncpp.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/jsoncpp.dir/build.make CMakeFiles/jsoncpp.dir/external/jsoncpp.cpp.o
+.PHONY : external/jsoncpp.cpp.o
+
+external/jsoncpp.i: external/jsoncpp.cpp.i
+
+.PHONY : external/jsoncpp.i
+
+# target to preprocess a source file
+external/jsoncpp.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/jsoncpp.dir/build.make CMakeFiles/jsoncpp.dir/external/jsoncpp.cpp.i
+.PHONY : external/jsoncpp.cpp.i
+
+external/jsoncpp.s: external/jsoncpp.cpp.s
+
+.PHONY : external/jsoncpp.s
+
+# target to generate assembly for a file
+external/jsoncpp.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/jsoncpp.dir/build.make CMakeFiles/jsoncpp.dir/external/jsoncpp.cpp.s
+.PHONY : external/jsoncpp.cpp.s
 
 main.o: main.cpp.o
 
@@ -149,7 +216,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/untitled.dir/build.make CMakeFiles/untitled.dir/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -158,7 +225,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/untitled.dir/build.make CMakeFiles/untitled.dir/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -167,7 +234,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/untitled.dir/build.make CMakeFiles/untitled.dir/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -178,7 +245,14 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... untitled"
+	@echo "... jsoncpp"
+	@echo "... server"
+	@echo "... WebsocketServer.o"
+	@echo "... WebsocketServer.i"
+	@echo "... WebsocketServer.s"
+	@echo "... external/jsoncpp.o"
+	@echo "... external/jsoncpp.i"
+	@echo "... external/jsoncpp.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

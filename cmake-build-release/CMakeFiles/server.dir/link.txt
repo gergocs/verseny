@@ -1,0 +1,1 @@
+/usr/bin/c++   -Wall -pthread -O3 -DNDEBUG   CMakeFiles/server.dir/main.cpp.o CMakeFiles/server.dir/WebsocketServer.cpp.o  -o server  libjsoncpp.a -lsqlite3 

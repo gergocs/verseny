@@ -1,3 +1,4 @@
-/home/gergocs/CLionProjects/untitled/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/gergocs/CLionProjects/untitled/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/gergocs/CLionProjects/untitled/cmake-build-debug/CMakeFiles/untitled.dir
+/home/gergocs/CLionProjects/server/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/gergocs/CLionProjects/server/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/gergocs/CLionProjects/server/cmake-build-debug/CMakeFiles/server.dir
+/home/gergocs/CLionProjects/server/cmake-build-debug/CMakeFiles/jsoncpp.dir
