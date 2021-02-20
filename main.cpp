@@ -53,10 +53,15 @@ int main() {
 
     int exit;
 
+    string tmp;
+
+    string previ;
+    string prevd;
+
     const string success = "done";
     const string error = "error";
     const string closed = "closed";
-    string tmp;
+
 
     const string query = "SELECT * FROM reports";
     const string last = "SELECT id FROM reports ORDER BY id DESC LIMIT 1";
@@ -116,7 +121,6 @@ int main() {
         mainEventLoop.post([conn, args, &server]() {
             clog << "message handler on the main thread" << endl;
             clog << "Message payload:" << endl;
-            cout<<"Alma"<<endl;
             for (const auto& key : args.getMemberNames()) {
                 clog << "\t" << key << ": " << args[key].asString() << endl;
             }
@@ -127,7 +131,7 @@ int main() {
     thread serverThread([&server]() {
         server.run(PORT_NUMBER);
     });
-    thread inputThread([&server, &db, &query, &last, &exit, &messaggeError]() {
+    thread inputThread([&server, &db, &query, &last, &exit, &messaggeError, &previ, &prevd]() {
         const string input = "ready";
         while (true) {
             gCounter = 0;
@@ -143,8 +147,6 @@ int main() {
                 cout << "I'm ready" << endl;
             }
 
-            this_thread::sleep_for(chrono::seconds(1));
-
             gData[gData.length()-1] = ' ';
             gData += "]}";
 
@@ -152,74 +154,116 @@ int main() {
             payload["input"] = input;
             server.broadcastMessage("message",payload);
 
-            server.message("message", [&db, &last, &exit, &messaggeError, &server](const ClientConnection& conn, const Json::Value &args) {
+            this_thread::sleep_for(chrono::seconds(1));
+
+            server.message("message", [&db, &last, &exit, &messaggeError, &previ, &prevd, &server](const ClientConnection& conn, const Json::Value &args) {
                 string switcher = args["input"].asString();
                 if(switcher == closer){
                     cout<<"Alma"<<endl;
                 }else if(switcher == json){
                     Json::Reader reader;
                     reader.parse(gData, gJson);
+                    gJson["input"] = "data";
                     server.broadcastMessage("message", gJson);
                 }else if(switcher == inserter){
                     unsigned int counter = 0;
 
-                    size_t found;
+                    gData = "{ \"reports\": [";
 
-                    sqlite3_exec(db, last.c_str(), callback, nullptr, nullptr);
+                    int exit3 = sqlite3_exec(db, last.c_str(), callback, nullptr, nullptr);
 
-                    found = gData.find(R"("id": ")");
+                    if(exit3 != SQLITE_OK){
+                        cout << "Error " << sqlite3_errmsg(db) << endl;
+                        cout << exit3 << endl;
+                    }else{
+                        cout << "I'm ready" << endl;
+                    }
 
-                    string str;
+                    gData[gData.length()-1] = ' ';
+                    gData += "]}";
 
-                    if (found != string::npos) {
-                        size_t found2 = gData.find("\"\n");
-                        for (unsigned int i = found + 7; i < found2; i++) {
+                    cout<<gData<<endl;
+
+                    size_t found = gData.find(R"({"id":")");
+
+                    if(found != string::npos){
+                        string str;
+                        size_t found2 = gData.find("} ]}");
+                        for(unsigned int i = found+7; i < found2; i++){
                             str += gData[i];
                         }
                         counter = stoi(str);
-                        counter++;
                     }
+
+                    cout<<counter<<endl;
+
+                    counter++;
 
                     string insert = "INSERT INTO reports VALUES(";
 
                     insert += to_string(counter);
-                    insert += ",\"";
-                    insert += args["name"].asString() + "\",\"" + args["class"].asString() + "\", \"" + args["place"].asString() + "\", ";
-                    insert += args["type"].asString();
-                    insert += ",";
-                    insert += args["current"].asString();
-                    insert += ",";
-                    insert += args["cprotect"].asString();
-                    insert += ",";
-                    insert += args["good"].asString();
-                    insert += ",";
-                    insert += args["resistance"].asString();
-                    insert += ",\"";
-                    insert += args["final"].asString();
-                    insert += "\");";
 
-                    exit = sqlite3_exec(db, insert.c_str(), nullptr, nullptr, &messaggeError);
+                    string after;
+                    after += ",\"";
+                    after += args["name"].asString() + "\",\"" + args["class"].asString() + "\", \"" + args["place"].asString() + "\", ";
+                    after += args["type"].asString();
+                    after += ",";
+                    after += args["current"].asString();
+                    after += ",";
+                    after += args["cprotect"].asString();
+                    after += ",";
+                    after += args["good"].asString();
+                    after += ",";
+                    after += args["resistance"].asString();
+                    after += ",\"";
+                    after += args["final"].asString();
+                    after += "\");";
 
-                    if (exit != SQLITE_OK) {
-                        cout << "Error Insert" << endl;
-                        sqlite3_free(messaggeError);
-                    } else {
-                        cout << "Done" << endl;
+                    insert += after;
+
+                    if(after != previ){
+                        exit = sqlite3_exec(db, insert.c_str(), nullptr, nullptr, &messaggeError);
+
+                        if (exit != SQLITE_OK) {
+                            cout << "Error Insert" <<messaggeError<< endl;
+                            sqlite3_free(messaggeError);
+                        } else {
+                            cout << "Done" << endl;
+                        }
+
+                        gJson["input"] = "data";
+
+                        server.broadcastMessage("message",gJson);
+
+                        previ = after;
                     }
-                    server.broadcastMessage("message",gJson);
+
                 }else if(switcher == deleter){
                     string sql = "DELETE FROM reports WHERE id = " + args["id"].asString() + ";";
 
-                    exit = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &messaggeError);
+                    cout<<sql<<endl;
 
-                    if (exit != SQLITE_OK) {
-                        cout << " ERROR DELETE" << endl;
-                        sqlite3_free(messaggeError);
-                    } else {
-                        cout << "deleted " << args["id"].asString() << endl;
+                    if(sql != prevd) {
+
+                        exit = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &messaggeError);
+
+                        if (exit != SQLITE_OK) {
+                            cout << " ERROR DELETE" << endl;
+                            sqlite3_free(messaggeError);
+                        } else {
+                            cout << "deleted " << args["id"].asString() << endl;
+                        }
+
+                        gJson["input"] = "data";
+
+                        server.broadcastMessage("message",gJson);
+
+                        prevd = sql;
                     }
+
                 }else{
                     cout<<switcher<<endl;
+                    this_thread::sleep_for(chrono::seconds(10));
                 }
 
             });
