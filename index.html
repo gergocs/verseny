@@ -9,8 +9,7 @@
 </head>
 <body>
 
-<form action="output.txt"  method="post">
-    <table border="5">
+    <table border="5" id ="empTable">
         <caption title="Áramütés elleni védelem mérési jegyzőkönyv">Áramütés elleni védelem mérési jegyzőkönyv</caption>
         <tr>
             <td rowspan="2">#</td>
@@ -25,21 +24,21 @@
         </tr>
         <tr>
             <th title="típus">Típus</th>
-            <th title="Névleges áram">Névleges áram<br></th>
+            <th title="Névleges áram">Névleges áram</th>
             <th title="Megtekintés">Megtekintés</th>
             <th title="Műszeres">Műszeres</th>
 
         </tr>
         <tr>
-            <td><button onclick="addRow()">+</button></td>
-            <td><input type="number" autofocus title="Sorszám:" min="1" name="number"></td>
-            <td><input title="Vizsgálat helye,Berendezés megnevezése" type="text" name="text"></td>
-            <td><input type="text" title="Helye:" name="text1">
+            <td><button onclick="submit()">+</button></td>
+            <td></td>
+            <td><input title="Vizsgálat helye,Berendezés megnevezése" type="text" name="text" id = "name"></td>
+            <td><input type="text" title="Helye:" name="text1" id = "place">
             </td>
 
             <td>
                 <label>
-                    <select name="ev-class">
+                    <select name="ev-class" id = "class">
 
                         <option  value="nothing"></option>
                         <option  value="zero">0</option>
@@ -55,7 +54,7 @@
 
             <td>
                 <label>
-                    <select name="biztaram">
+                    <select name="biztaram" id = "type">
                         <option value="-">-</option>
                         <option value="B">B</option>
                         <option value="C">C</option>
@@ -67,7 +66,7 @@
 
             <td>
                 <label>
-                    <select name="bizttipus">
+                    <select name="bizttipus" id = "current">
                         <option value="-">-</option>
                         <option value="8">8</option>
                         <option value="10">10</option>
@@ -79,25 +78,25 @@
 
             <td>
                 <label>
-                    <select>
+                    <select name="megfelelt" id = "cprotect">
                         <option value="nothing"></option>
-                        <option value="right">MF</option>
-                        <option value="inapt">NF</option>
+                        <option value="right">van</option>
+                        <option value="inapt">nincs</option>
                     </select>
                 </label>
             </td>
             <td>
                 <label>
-                    <select name="certification">
+                    <select name="certification" id = "good">
                         <option value="nothing1"></option>
-                        <option  value="nothing">-</option>
-                        <option  value="pe">PE</option>
+                        <option  value="mf">MF</option>
+                        <option  value="nf">NF</option>
                     </select>
                 </label>
             </td>
             <td>
                 <label>
-                    <select name="instrumental">
+                    <select name="instrumental" id = "resistance">
                         <option value="-">-</option>
                         <option value="PE-folyt">PE-folytonos</option>
                     </select>
@@ -105,7 +104,7 @@
             </td>
             <td>
                 <label>
-                    <select name="classification">
+                    <select name="classification" id = "final">
                         <option value="nothing"></option>
                         <option value="right1">MF</option>
                         <option value="linapt1">NF</option>
@@ -115,7 +114,8 @@
         </tr>
     </table>
     <input type="button" id="bt" value="Submit Data" onclick="submit()">
-</form>
 
+
+<input type="button" id="bt" value="Update" onclick="update()">
 </body>
 </html>
