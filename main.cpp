@@ -53,6 +53,8 @@ int main() {
 
     int exit;
 
+    bool busy = false;
+
     string tmp;
 
     string previ;
@@ -131,8 +133,7 @@ int main() {
     thread serverThread([&server]() {
         server.run(PORT_NUMBER);
     });
-    thread inputThread([&server, &db, &query, &last, &exit, &messaggeError, &previ, &prevd]() {
-        const string input = "ready";
+    thread inputThread([&server, &db, &query, &last, &exit, &messaggeError, &previ, &busy, &prevd]() {
         while (true) {
             gCounter = 0;
 
@@ -150,22 +151,34 @@ int main() {
             gData[gData.length()-1] = ' ';
             gData += "]}";
 
-            Json::Value payload;
-            payload["input"] = input;
-            server.broadcastMessage("message",payload);
+            this_thread::sleep_for (chrono::milliseconds(500));
 
-            this_thread::sleep_for(chrono::seconds(1));
 
-            server.message("message", [&db, &last, &exit, &messaggeError, &previ, &prevd, &server](const ClientConnection& conn, const Json::Value &args) {
+            server.message("message", [&db, &last, &exit, &messaggeError, &previ, &prevd, &busy, &server](const ClientConnection& conn, const Json::Value &args) {
                 string switcher = args["input"].asString();
-                if(switcher == closer){
-                    cout<<"Alma"<<endl;
+                if (switcher == closer) {
+                    cout << "Alma" << endl;
+                }else if(switcher == "ping"){
+                    Json::Value pong;
+                    pong["input"] = "pong";
+                    server.sendMessage(conn, "message",pong);
+                }else if(switcher == "rbusy"){
+                    if(busy){
+                        gJson["input"] = "busy";
+                    }else{
+                        gJson["input"] = "nbusy";
+                    }
+
+                    server.sendMessage(conn, "message",gJson);
                 }else if(switcher == json){
                     Json::Reader reader;
                     reader.parse(gData, gJson);
                     gJson["input"] = "data";
-                    server.broadcastMessage("message", gJson);
+                    server.sendMessage(conn, "message", gJson);
                 }else if(switcher == inserter){
+
+                    busy = true;
+
                     unsigned int counter = 0;
 
                     gData = "{ \"reports\": [";
@@ -231,14 +244,14 @@ int main() {
                             cout << "Done" << endl;
                         }
 
-                        gJson["input"] = "data";
-
-                        server.broadcastMessage("message",gJson);
-
                         previ = after;
                     }
 
+                    busy = false;
+
                 }else if(switcher == deleter){
+                    busy = true;
+
                     string sql = "DELETE FROM reports WHERE id = " + args["id"].asString() + ";";
 
                     cout<<sql<<endl;
@@ -254,13 +267,9 @@ int main() {
                             cout << "deleted " << args["id"].asString() << endl;
                         }
 
-                        gJson["input"] = "data";
-
-                        server.broadcastMessage("message",gJson);
-
                         prevd = sql;
                     }
-
+                    busy = false;
                 }else{
                     cout<<switcher<<endl;
                     this_thread::sleep_for(chrono::seconds(10));
