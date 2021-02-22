@@ -8,7 +8,7 @@
 #include "external/asio/io_service.hpp"
 #include "WebsocketServer.h"
 
-#define database "rezdb.db"
+#define database "rezdb2.db"
 
 #define PORT_NUMBER 8080
 
@@ -54,6 +54,7 @@ int main() {
     int exit;
 
     bool busy = false;
+    bool endit = false;
 
     string tmp;
 
@@ -77,11 +78,13 @@ int main() {
                            "`cprotect` tinyint(1) NOT NULL,"
                            "`good` tinyint(1) NOT NULL,"
                            "`resistance` int(11) NOT NULL,"
-                           "`final` longtext NOT NULL"
+                           "`final` longtext NOT NULL,"
+                           "`eplace` text DEFAULT NULL"
                            ");";
 
-    exit = sqlite3_open(database, &db);
+    const string alter = "ALTER TABLE reports `eplace` text DEFAULT NULL";
 
+    exit = sqlite3_open(database, &db);
     sqlite3_exec(db,creater.c_str(), nullptr, nullptr, &messaggeError);
 
     if (exit != SQLITE_OK) {
@@ -89,6 +92,15 @@ int main() {
         sqlite3_free(messaggeError);
     }else{
         cout<<"done"<<endl;
+    }
+
+    sqlite3_exec(db,alter.c_str(), nullptr, nullptr, &messaggeError);
+
+    if (exit != SQLITE_OK) {
+        cerr << "Error Create Table" << endl;
+        sqlite3_free(messaggeError);
+    }else{
+        cout<<"inserted"<<endl;
     }
 
     sqlite3_exec(db, query.c_str(), callback, nullptr, nullptr);
@@ -133,8 +145,8 @@ int main() {
     thread serverThread([&server]() {
         server.run(PORT_NUMBER);
     });
-    thread inputThread([&server, &db, &query, &last, &exit, &messaggeError, &previ, &busy, &prevd]() {
-        while (true) {
+    thread inputThread([&server, &db, &query, &last, &exit, &messaggeError, &previ, &busy, &prevd, &endit]() {
+        while (!endit) {
             gCounter = 0;
 
             gData = "{ \"reports\": [";
@@ -154,10 +166,11 @@ int main() {
             this_thread::sleep_for (chrono::milliseconds(500));
 
 
-            server.message("message", [&db, &last, &exit, &messaggeError, &previ, &prevd, &busy, &server](const ClientConnection& conn, const Json::Value &args) {
+            server.message("message", [&db, &last, &exit, &messaggeError, &previ, &prevd, &busy, &server, &endit](const ClientConnection& conn, const Json::Value &args) {
                 string switcher = args["input"].asString();
                 if (switcher == closer) {
                     cout << "Alma" << endl;
+                    endit = true;
                 }else if(switcher == "ping"){
                     Json::Value pong;
                     pong["input"] = "pong";
@@ -208,8 +221,6 @@ int main() {
                         counter = stoi(str);
                     }
 
-                    cout<<counter<<endl;
-
                     counter++;
 
                     string insert = "INSERT INTO reports VALUES(";
@@ -230,10 +241,12 @@ int main() {
                     after += args["resistance"].asString();
                     after += ",\"";
                     after += args["final"].asString();
+                    after += "\",\"";
+                    after += args["eplace"].asString();
                     after += "\");";
 
                     insert += after;
-
+                    cout<<insert<<endl;
                     if(after != previ){
                         exit = sqlite3_exec(db, insert.c_str(), nullptr, nullptr, &messaggeError);
 
@@ -246,7 +259,6 @@ int main() {
 
                         previ = after;
                     }
-
                     busy = false;
 
                 }else if(switcher == deleter){
@@ -269,6 +281,7 @@ int main() {
 
                         prevd = sql;
                     }
+
                     busy = false;
                 }else{
                     cout<<switcher<<endl;
